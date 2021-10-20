@@ -15,6 +15,9 @@
 		3DB9FCA9272009D6003E5520 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DB9FCA7272009D6003E5520 /* LaunchScreen.storyboard */; };
 		3DB9FCB4272009D6003E5520 /* BatteryLevelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCB3272009D6003E5520 /* BatteryLevelTests.swift */; };
 		3DB9FCBF272009D6003E5520 /* BatteryLevelUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCBE272009D6003E5520 /* BatteryLevelUITests.swift */; };
+		3DB9FCCF272009F1003E5520 /* BatteryLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCCC272009F1003E5520 /* BatteryLevelView.swift */; };
+		3DB9FCD0272009F1003E5520 /* Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCCD272009F1003E5520 /* Exts.swift */; };
+		3DB9FCD1272009F1003E5520 /* BatteryLevelLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCCE272009F1003E5520 /* BatteryLevelLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		3DB9FCBA272009D6003E5520 /* BatteryLevelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BatteryLevelUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DB9FCBE272009D6003E5520 /* BatteryLevelUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryLevelUITests.swift; sourceTree = "<group>"; };
 		3DB9FCC0272009D6003E5520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DB9FCCC272009F1003E5520 /* BatteryLevelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryLevelView.swift; sourceTree = "<group>"; };
+		3DB9FCCD272009F1003E5520 /* Exts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Exts.swift; sourceTree = "<group>"; };
+		3DB9FCCE272009F1003E5520 /* BatteryLevelLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryLevelLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +112,9 @@
 				3DB9FCA5272009D6003E5520 /* Assets.xcassets */,
 				3DB9FCA7272009D6003E5520 /* LaunchScreen.storyboard */,
 				3DB9FCAA272009D6003E5520 /* Info.plist */,
+				3DB9FCCE272009F1003E5520 /* BatteryLevelLayer.swift */,
+				3DB9FCCC272009F1003E5520 /* BatteryLevelView.swift */,
+				3DB9FCCD272009F1003E5520 /* Exts.swift */,
 			);
 			path = BatteryLevel;
 			sourceTree = "<group>";
@@ -258,9 +267,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DB9FCD1272009F1003E5520 /* BatteryLevelLayer.swift in Sources */,
+				3DB9FCD0272009F1003E5520 /* Exts.swift in Sources */,
 				3DB9FCA1272009D2003E5520 /* ViewController.swift in Sources */,
 				3DB9FC9D272009D2003E5520 /* AppDelegate.swift in Sources */,
 				3DB9FC9F272009D2003E5520 /* SceneDelegate.swift in Sources */,
+				3DB9FCCF272009F1003E5520 /* BatteryLevelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
