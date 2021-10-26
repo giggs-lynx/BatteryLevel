@@ -9,28 +9,31 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private lazy var levelView = BatteryLevelView(frame: CGRect(origin: .zero, size: .zero))
+    private lazy var qqView = FieldView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        attachLevelView()
-        //        levelView.level = 50.0
+        attachQQView()
+//        qqView.level = 70.0
         mock()
+        
     }
     
-    private func attachLevelView() -> Void {
+    private func attachQQView() -> Void {
 //        levelView.batteryInsets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
-        levelView.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(levelView)
+        qqView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(qqView)
         
         NSLayoutConstraint.activate([
-            levelView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            levelView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            levelView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0),
-            levelView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0),
-            levelView.heightAnchor.constraint(equalTo: levelView.widthAnchor, multiplier: 41.0 / 135.0)
+            qqView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            qqView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            qqView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0),
+            qqView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0),
+            qqView.heightAnchor.constraint(equalTo: qqView.widthAnchor, multiplier: 41.0 / 135.0),
+//            qqView.heightAnchor.constraint(equalToConstant: 20.0)
         ])
     }
     
@@ -38,14 +41,16 @@ class ViewController: UIViewController {
         var level: Int = 0
         var increase: Bool = true
         
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
-                level += increase ? 1 : -1
+                level += increase ? 20 : -20
                 if level == 0 || level == 100 {
                     increase.toggle()
                 }
                 
-                self?.levelView.level = CGFloat(level)
+                self?.qqView.level = CGFloat(level)
+//                self?.qqView.progress = CGFloat(level) / 100.0
+                print(level)
             }
         }
     }

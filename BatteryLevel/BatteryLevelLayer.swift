@@ -195,7 +195,19 @@ class BatteryLevelLayer: CALayer {
         private static let maxValue: CGFloat = 100.0
         
         private lazy var pulseLayer: CAGradientLayer = createPulseLayer()
-        private lazy var whiteLayer = CALayer()
+        
+        private lazy var whiteLayer: CALayer = {
+            let l = CALayer()
+            l.backgroundColor = UIColor.white.cgColor
+            l.mask = pulseLayer
+            return l
+        }()
+        
+        private lazy var maskLayer: CALayer = {
+            let layer = CALayer()
+            layer.backgroundColor = UIColor.white.cgColor
+            return layer
+        }()
         
         @NSManaged
         private var _value: CGFloat
@@ -230,13 +242,21 @@ class BatteryLevelLayer: CALayer {
         override func layoutSublayers() {
             super.layoutSublayers()
             
+            print("Qoooooo")
+            
+            whiteLayer.frame = bounds
+            print(whiteLayer.mask?.frame)
+            addSublayer(whiteLayer)
+            
             updateWhiteMaskLayer()
+            
+            mask = maskLayer
         }
         
         private func setup() -> Void {
-            whiteLayer.backgroundColor = UIColor.white.cgColor
-            whiteLayer.mask = pulseLayer
-            addSublayer(whiteLayer)
+//            whiteLayer.backgroundColor = UIColor.white.cgColor
+//            whiteLayer.mask = pulseLayer
+//            addSublayer(whiteLayer)
         }
         
         override func draw(in ctx: CGContext) {
@@ -248,8 +268,11 @@ class BatteryLevelLayer: CALayer {
             fillColor.setFill()
             path.fill()
             
-            self.mask = createMaskLayer(in: bounds)
-            whiteLayer.frame = bounds
+//            self.mask = createMaskLayer(in: bounds)
+            let width = bounds.size.width * (_value / Self.maxValue)
+            let size = CGSize(width: width, height: bounds.size.height)
+            let frame = CGRect(origin: bounds.origin, size: size)
+            maskLayer.frame = frame
             
             UIGraphicsPopContext()
         }
@@ -271,7 +294,7 @@ class BatteryLevelLayer: CALayer {
 //
 //                anim.keyPath = event
 //                anim.fromValue = presentation()?._value ?? 0.0
-//                anim.toValue = 5.0
+//                anim.toValue = nil
 //                print("ZZZZ")
 //                return anim
 //            }
@@ -281,17 +304,17 @@ class BatteryLevelLayer: CALayer {
 
 
         
-        private func createMaskLayer(in rect: CGRect) -> CALayer {
-            let width = rect.size.width * (_value / Self.maxValue)
-            let size = CGSize(width: width, height: rect.size.height)
-            let frame = CGRect(origin: rect.origin, size: size)
-            
-            let layer = CALayer()
-            layer.frame = frame
-            layer.backgroundColor = UIColor.white.cgColor
-            
-            return layer
-        }
+//        private func createMaskLayer(in rect: CGRect) -> CALayer {
+//            let width = rect.size.width * (_value / Self.maxValue)
+//            let size = CGSize(width: width, height: rect.size.height)
+//            let frame = CGRect(origin: rect.origin, size: size)
+//
+//            let layer = CALayer()
+//            layer.frame = frame
+//            layer.backgroundColor = UIColor.white.cgColor
+//
+//            return layer
+//        }
         
         private func updateWhiteMaskLayer() {
             pulseLayer.frame = CGRect(x: -bounds.width, y: 0.0, width: bounds.width, height: bounds.height)
