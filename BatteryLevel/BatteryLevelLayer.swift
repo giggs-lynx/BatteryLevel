@@ -217,7 +217,8 @@ class BatteryLevelLayer: CALayer {
         animation.duration = 1.5
         animation.repeatCount = .infinity
         animation.isRemovedOnCompletion = false
-        animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        animation.autoreverses = true
         symbolLayer.add(animation, forKey: nil)
     }
     
