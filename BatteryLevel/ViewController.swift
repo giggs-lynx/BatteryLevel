@@ -9,22 +9,28 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    private let qLevel: CGFloat = 5
     private lazy var qqView = BatteryLevelView()
+    private lazy var qqButton: UIButton = {
+        let o = UIButton()
+        o.titleLabel?.adjustsFontSizeToFitWidth = true
+        o.setTitle("QQ", for: .normal)
+        o.backgroundColor = UIColor.magenta
+        o.addTarget(self, action: #selector(qqButtonDidTap(sender:)), for: .touchUpInside)
+        
+        return o
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         attachQQView()
+        attachQQButton()
         qqView.level = 70.0
 //        mock()
         
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.qqView.isCharging.toggle()
-            }
-        }
-        
     }
+    
     private func attachQQView() -> Void {
         qqView.insets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
         
@@ -40,6 +46,58 @@ class ViewController: UIViewController {
             qqView.heightAnchor.constraint(equalTo: qqView.widthAnchor, multiplier: 41.0 / 135.0),
 //            qqView.heightAnchor.constraint(equalToConstant: 20.0)
         ])
+    }
+    
+    private func attachQQButton() -> Void {
+        qqButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(qqButton)
+        
+        NSLayoutConstraint.activate([
+            qqButton.topAnchor.constraint(equalTo: qqView.bottomAnchor, constant: 20.0),
+            qqButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            qqButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100.0),
+            qqButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100.0),
+            qqButton.heightAnchor.constraint(equalTo: qqButton.widthAnchor, multiplier: 41.0 / 135.0)
+        ])
+    }
+    
+    @objc private func qqButtonDidTap(sender: UIButton) -> Void {
+        let ac = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+        
+        let startAct = UIAlertAction.init(title: "start animation", style: .default) { [weak self] _ in
+            self?.qqView.isCharging = true
+        }
+        
+        let stopAct = UIAlertAction.init(title: "stop animation", style: .default) { [weak self] _ in
+                self?.qqView.isCharging = false
+        }
+        
+        let incAct = UIAlertAction.init(title: "level + \(qLevel)", style: .default) { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            
+            self.qqView.level += self.qLevel
+        }
+        
+        let decAct = UIAlertAction.init(title: "level - \(qLevel)", style: .default) { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            
+            self.qqView.level -= self.qLevel
+        }
+        
+        let cancelAct = UIAlertAction.init(title: "cancel", style: .cancel)
+        
+        ac.addAction(startAct)
+        ac.addAction(stopAct)
+        ac.addAction(incAct)
+        ac.addAction(decAct)
+        ac.addAction(cancelAct)
+        
+        present(ac, animated: true, completion: nil)
     }
     
     private func mock() -> Void {
