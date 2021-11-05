@@ -15,8 +15,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         attachQQView()
-//        qqView.level = 20.0
-        mock()
+        qqView.level = 70.0
+//        mock()
+        
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.qqView.isCharging.toggle()
+            }
+        }
         
     }
     private func attachQQView() -> Void {

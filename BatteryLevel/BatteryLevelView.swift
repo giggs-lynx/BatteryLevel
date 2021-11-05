@@ -80,6 +80,15 @@ class BatteryLevelView: UIView {
         }
     }
     
+    var isCharging: Bool {
+        get {
+            batteryLayer.isCharging
+        }
+        set {
+            batteryLayer.isCharging = newValue
+        }
+    }
+    
     private var batteryLayer: BatteryLevelLayer {
         return layer as! BatteryLevelLayer
     }

@@ -61,6 +61,12 @@ class BatteryLevelLayer: CALayer {
         }
     }
     
+    var isCharging: Bool = false {
+        didSet {
+            isCharging ? startChargingAnimation() : stopChargingAnimation()
+        }
+    }
+    
     private lazy var frameLayer = CAShapeLayer()
     private lazy var fieldLayer = FieldLayer()
     private lazy var symbolLayer = CAShapeLayer()
@@ -136,6 +142,7 @@ class BatteryLevelLayer: CALayer {
         symbolLayer.backgroundColor = UIColor.clear.cgColor
         symbolLayer.fillColor = symbolColor.cgColor
         symbolLayer.path = createSymbolPath(in: symbolRect).cgPath
+        symbolLayer.opacity = 0.0
         
         UIGraphicsPopContext()
     }
@@ -189,6 +196,33 @@ class BatteryLevelLayer: CALayer {
         path.close()
         
         return path
+    }
+    
+    private func startChargingAnimation() -> Void {
+        startFlashSymbol()
+        fieldLayer.startShimmer()
+    }
+    
+    private func stopChargingAnimation() -> Void {
+        stopFlashSymbol()
+        fieldLayer.stopShimmer()
+    }
+    
+    private func startFlashSymbol() -> Void {
+        stopFlashSymbol()
+        
+        let animation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.opacity))
+        animation.fromValue = 0.0
+        animation.toValue = 1.0
+        animation.duration = 1.5
+        animation.repeatCount = .infinity
+        animation.isRemovedOnCompletion = false
+        animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        symbolLayer.add(animation, forKey: nil)
+    }
+    
+    private func stopFlashSymbol() -> Void {
+        symbolLayer.removeAllAnimations()
     }
     
     private class FieldLayer: CALayer {
@@ -273,7 +307,9 @@ class BatteryLevelLayer: CALayer {
             
             whiteLayer.frame = bounds
             addSublayer(whiteLayer)
-            updateWhiteMaskLayer()
+            
+            pulseLayer.frame = CGRect(x: -bounds.width, y: 0.0, width: bounds.width, height: bounds.height)
+            
             mask = maskLayer
         }
         
@@ -303,22 +339,6 @@ class BatteryLevelLayer: CALayer {
             }
         }
         
-        private func updateWhiteMaskLayer() {
-            pulseLayer.frame = CGRect(x: -bounds.width, y: 0.0, width: bounds.width, height: bounds.height)
-            pulseLayer.removeAllAnimations()
-            let animation = CABasicAnimation(keyPath: "position.x")
-            animation.byValue = bounds.width * 2.0
-            animation.duration = 1.5
-            animation.isRemovedOnCompletion = false
-            
-            let group = CAAnimationGroup()
-            group.animations = [animation]
-            group.duration = 3.0
-            group.repeatCount = .infinity
-            
-            pulseLayer.add(group, forKey: nil)
-        }
-        
         private func createPulseLayer() -> CAGradientLayer {
             let layer = CAGradientLayer()
             
@@ -335,6 +355,26 @@ class BatteryLevelLayer: CALayer {
             layer.endPoint = CGPoint(x: 1.0, y: 0.05)
             
             return layer
+        }
+        
+        func stopShimmer() -> Void {
+            pulseLayer.removeAllAnimations()
+        }
+        
+        func startShimmer() -> Void {
+            stopShimmer()
+            
+            let animation = CABasicAnimation(keyPath: "position.x")
+            animation.byValue = bounds.width * 2.0
+            animation.duration = 1.5
+            animation.isRemovedOnCompletion = false
+            
+            let group = CAAnimationGroup()
+            group.animations = [animation]
+            group.duration = 3.0
+            group.repeatCount = .infinity
+            
+            pulseLayer.add(group, forKey: nil)
         }
         
     }
