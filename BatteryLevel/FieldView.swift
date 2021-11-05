@@ -209,9 +209,9 @@ class FieldLayer: CALayer {
     override func layoutSublayers() {
         super.layoutSublayers()
         
-//        mask  = maskLayer
+        mask  = maskLayer
         
-//        pulseLayer.frame = bounds
+        pulseLayer.frame = bounds
         addSublayer(pulseLayer)
         
         print("Qoo")
@@ -255,15 +255,22 @@ class FieldLayer: CALayer {
         let fieldRect = CGRect(origin: bounds.origin, size: fieldSize)
         let fieldPath = UIBezierPath(rect: fieldRect)
         
-        
-        
         ctx.setFillColor(_color)
-//        ctx.fill(bounds)
-        fieldPath.fill()
+        ctx.fill(bounds)
+//        fieldPath.fill()
         
-//        maskLayer.path = fieldPath.cgPath
-        pulseLayer.frame = fieldRect
-        pulseLayer.setNeedsDisplay()
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.isRemovedOnCompletion = true
+        animation.keyPath = "path"
+        animation.duration = 0.25
+        animation.fromValue = maskLayer.path
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        maskLayer.add(animation, forKey: "path")
+        
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        maskLayer.path = fieldPath.cgPath
+        CATransaction.commit()
         
         UIGraphicsPopContext()
     }

@@ -16,21 +16,27 @@ class BatteryLevelLayer: CALayer {
     private static let symbolToBoundsWidthRatio: CGFloat = (17.0 / 135.0)
     private static let symbolToBoundsHeightRatio: CGFloat = (24.0 / 41.0)
     
-    var lineWidth: CGFloat = 2.0 {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-    
-    var lineColor: UIColor = .white {
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-    
     var insets: UIEdgeInsets = .zero {
         didSet {
             setNeedsDisplay()
+        }
+    }
+    
+    var padding: CGFloat = 2.0 {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    var lineWidth: CGFloat = 2.0 {
+        didSet {
+            frameLayer.lineWidth = lineWidth
+        }
+    }
+    
+    var lineColor: UIColor = .label {
+        didSet {
+            frameLayer.strokeColor = lineColor.cgColor
         }
     }
     
@@ -40,9 +46,9 @@ class BatteryLevelLayer: CALayer {
         }
     }
     
-    var fieldPadding: CGFloat = 2.0 {
+    var symbolColor: UIColor = .label {
         didSet {
-            setNeedsDisplay()
+            symbolLayer.fillColor = symbolColor.cgColor
         }
     }
     
@@ -55,28 +61,36 @@ class BatteryLevelLayer: CALayer {
         }
     }
     
+    private lazy var frameLayer = CAShapeLayer()
     private lazy var fieldLayer = FieldLayer()
-    private lazy var symbolLayer = SymbolLayer()
+    private lazy var symbolLayer = CAShapeLayer()
     
     override init() {
         super.init()
-        
+
         setup()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+
         setup()
     }
-    
+
     override init(layer: Any) {
         super.init(layer: layer)
-        
+
         setup()
     }
     
     private func setup() -> Void {
+        self.needsDisplayOnBoundsChange = true
+    }
+    
+    override func layoutSublayers() {
+        super.layoutSublayers()
+     
+        addSublayer(frameLayer)
         addSublayer(fieldLayer)
         addSublayer(symbolLayer)
     }
@@ -99,25 +113,29 @@ class BatteryLevelLayer: CALayer {
         let headSize = CGSize(width: headWidth, height: headHeight)
         let headRect = CGRect(origin: headOrigin, size: headSize)
         
-        lineColor.setStroke()
-        
-        let framePath = createFramePath(headRect: headRect, bodyRect: bodyRect)
-        framePath.lineWidth = lineWidth
-        framePath.stroke()
-        
-        let fieldOffset = lineWidth * 0.5 + fieldPadding
+        let fieldOffset = lineWidth * 0.5 + padding
         let fieldRect = bodyRect.insetBy(dx: fieldOffset, dy: fieldOffset)
-        
-        fieldLayer.frame = fieldRect
-        fieldLayer.cornerRadius = batteryCornerRadius - fieldOffset
+        let fieldCornerRadius = batteryCornerRadius - fieldOffset
         
         let symbolWidth = bounds.width * Self.symbolToBoundsWidthRatio
         let symbolHeight = bounds.height * Self.symbolToBoundsHeightRatio
         let symbolSize = CGSize(width: symbolWidth, height: symbolHeight)
         let symbolOrigin = bounds.centre - (symbolWidth * 0.5, symbolHeight * 0.5)
         let symbolRect = CGRect(origin: symbolOrigin, size: symbolSize)
+        
+        frameLayer.backgroundColor = UIColor.clear.cgColor
+        frameLayer.fillColor = UIColor.clear.cgColor
+        frameLayer.strokeColor = lineColor.cgColor
+        frameLayer.lineWidth = lineWidth
+        frameLayer.path = createFramePath(headRect: headRect, bodyRect: bodyRect).cgPath
+        
+        fieldLayer.frame = fieldRect
+        fieldLayer.cornerRadius = fieldCornerRadius
+        
         symbolLayer.frame = symbolRect
-        symbolLayer.setNeedsDisplay()
+        symbolLayer.backgroundColor = UIColor.clear.cgColor
+        symbolLayer.fillColor = symbolColor.cgColor
+        symbolLayer.path = createSymbolPath(in: symbolRect).cgPath
         
         UIGraphicsPopContext()
     }
@@ -148,48 +166,55 @@ class BatteryLevelLayer: CALayer {
         return path
     }
     
-    private class SymbolLayer: CALayer {
+    private func createSymbolPath(in rect: CGRect) -> UIBezierPath {
+        let _boundsTransform = CGAffineTransform(translationX: -rect.origin.x, y: -rect.origin.y)
+        let _bounds = rect.applying(_boundsTransform)
         
-        override func draw(in ctx: CGContext) {
-            UIGraphicsPushContext(ctx)
-            
-            let bounds = ctx.boundingBoxOfClipPath
-            let l = bounds.width * 2.0 / 3.0
-            
-            let leftOuter = CGPoint(x: bounds.minX, y: bounds.midY)
-            let top = CGPoint(x: bounds.minX + l, y: bounds.midY - l)
-            let rightInner = CGPoint(x: bounds.minX + l, y: bounds.midY)
-            let rightOuter = CGPoint(x: bounds.maxX, y: bounds.midY)
-            let bottom = CGPoint(x: bounds.maxX - l, y: bounds.maxY)
-            let leftInner = CGPoint(x: bounds.maxX - l, y: bounds.midY)
-            
-            let path = UIBezierPath()
-            path.move(to: leftOuter)
-            path.addLine(to: top)
-            path.addLine(to: rightInner)
-            path.addLine(to: rightOuter)
-            path.addLine(to: bottom)
-            path.addLine(to: leftInner)
-            path.close()
-            
-            UIColor.white.setFill()
-            path.fill()
-            
-            UIGraphicsPopContext()
-        }
+        let l = _bounds.width * 2.0 / 3.0
         
-        override class func needsDisplay(forKey key: String) -> Bool {
-            switch key {
-                case "frame":
-                    return true
-                default:
-                    return super.needsDisplay(forKey: key)
-            }
-        }
+        let leftOuter = CGPoint(x: _bounds.minX, y: _bounds.midY)
+        let top = CGPoint(x: _bounds.minX + l, y: _bounds.midY - l)
+        let rightInner = CGPoint(x: _bounds.minX + l, y: _bounds.midY)
+        let rightOuter = CGPoint(x: _bounds.maxX, y: _bounds.midY)
+        let bottom = CGPoint(x: _bounds.maxX - l, y: _bounds.midY + l)
+        let leftInner = CGPoint(x: _bounds.maxX - l, y: _bounds.midY)
         
+        let path = UIBezierPath()
+        path.move(to: leftOuter)
+        path.addLine(to: top)
+        path.addLine(to: rightInner)
+        path.addLine(to: rightOuter)
+        path.addLine(to: bottom)
+        path.addLine(to: leftInner)
+        path.close()
+        
+        return path
     }
     
     private class FieldLayer: CALayer {
+        
+        private struct ColorStop {
+            let range: Range<Int>
+            let startColor: UIColor
+            let endColor: UIColor
+        }
+        
+        private let stops: [ColorStop] = [
+            ColorStop(range: 0..<20, startColor: .systemRed, endColor: .systemRed),
+            ColorStop(range: 20..<60, startColor: .systemOrange, endColor: .systemOrange),
+            ColorStop(range: 60..<80, startColor: .systemYellow, endColor: .systemYellow),
+            ColorStop(range: 80..<101, startColor: .systemGreen, endColor: .systemGreen)
+        ]
+        
+        private var fillColor: UIColor {
+            let stop = stops.first(where: { $0.range ~= Int(_value) })
+            
+            guard let _stop = stop else {
+                return .clear
+            }
+            
+            return _stop.startColor.interpolateRGBColorTo(_stop.endColor, fraction: CGFloat(_stop.range.count))
+        }
         
         private static let minValue: CGFloat = 0.0
         private static let maxValue: CGFloat = 100.0
@@ -223,40 +248,33 @@ class BatteryLevelLayer: CALayer {
         
         override init() {
             super.init()
-            
+
             setup()
         }
-        
+
         required init?(coder: NSCoder) {
             super.init(coder: coder)
-            
+
+            setup()
+        }
+
+        override init(layer: Any) {
+            super.init(layer: layer)
+
             setup()
         }
         
-        override init(layer: Any) {
-            super.init(layer: layer)
-            
-            setup()
+        private func setup() -> Void {
+            self.needsDisplayOnBoundsChange = true
         }
         
         override func layoutSublayers() {
             super.layoutSublayers()
             
-            print("Qoooooo")
-            
             whiteLayer.frame = bounds
-            print(whiteLayer.mask?.frame)
             addSublayer(whiteLayer)
-            
             updateWhiteMaskLayer()
-            
             mask = maskLayer
-        }
-        
-        private func setup() -> Void {
-//            whiteLayer.backgroundColor = UIColor.white.cgColor
-//            whiteLayer.mask = pulseLayer
-//            addSublayer(whiteLayer)
         }
         
         override func draw(in ctx: CGContext) {
@@ -268,7 +286,6 @@ class BatteryLevelLayer: CALayer {
             fillColor.setFill()
             path.fill()
             
-//            self.mask = createMaskLayer(in: bounds)
             let width = bounds.size.width * (_value / Self.maxValue)
             let size = CGSize(width: width, height: bounds.size.height)
             let frame = CGRect(origin: bounds.origin, size: size)
@@ -279,42 +296,12 @@ class BatteryLevelLayer: CALayer {
         
         override class func needsDisplay(forKey key: String) -> Bool {
             switch key {
-                case "_value", "frame", "cornerRadius":
+                case "_value", "cornerRadius":
                     return true
                 default:
                     return super.needsDisplay(forKey: key)
             }
         }
-        
-//        override func action(forKey event: String) -> CAAction? {
-//            if event == "_value" {
-//                print("GGGG")
-//
-//                let anim = CABasicAnimation(keyPath: event)
-//
-//                anim.keyPath = event
-//                anim.fromValue = presentation()?._value ?? 0.0
-//                anim.toValue = nil
-//                print("ZZZZ")
-//                return anim
-//            }
-//
-//            return super.action(forKey: event)
-//        }
-
-
-        
-//        private func createMaskLayer(in rect: CGRect) -> CALayer {
-//            let width = rect.size.width * (_value / Self.maxValue)
-//            let size = CGSize(width: width, height: rect.size.height)
-//            let frame = CGRect(origin: rect.origin, size: size)
-//
-//            let layer = CALayer()
-//            layer.frame = frame
-//            layer.backgroundColor = UIColor.white.cgColor
-//
-//            return layer
-//        }
         
         private func updateWhiteMaskLayer() {
             pulseLayer.frame = CGRect(x: -bounds.width, y: 0.0, width: bounds.width, height: bounds.height)
@@ -348,23 +335,6 @@ class BatteryLevelLayer: CALayer {
             layer.endPoint = CGPoint(x: 1.0, y: 0.05)
             
             return layer
-        }
-        
-        var fillColor: UIColor {
-            switch _value {
-                case 0..<10:
-                    return .systemRed.interpolateRGBColorTo(.systemRed, fraction: _value / 10.0)
-                case 10..<25:
-                    return .systemRed.interpolateRGBColorTo(.systemRed, fraction: (_value - 10.0) / 15.0)
-                case 25..<50:
-                    return .systemOrange.interpolateRGBColorTo(.systemOrange, fraction: (_value - 25.0) / 25.0)
-                case 50..<75:
-                    return .systemYellow.interpolateRGBColorTo(.systemYellow, fraction: (_value - 50.0) / 25.0)
-                case 75...100:
-                    return .systemGreen.interpolateRGBColorTo(.systemGreen, fraction: (_value - 75.0) / 25.0)
-                default:
-                    return .systemBlue
-            }
         }
         
     }

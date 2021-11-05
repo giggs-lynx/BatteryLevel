@@ -9,19 +9,18 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private lazy var qqView = FieldView()
+    private lazy var qqView = BatteryLevelView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         attachQQView()
-//        qqView.level = 70.0
+//        qqView.level = 20.0
         mock()
         
     }
-    
     private func attachQQView() -> Void {
-//        levelView.batteryInsets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
+        qqView.insets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
         
         qqView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -43,13 +42,12 @@ class ViewController: UIViewController {
         
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
-                level += increase ? 20 : -20
+                level += increase ? 5 : -5
                 if level == 0 || level == 100 {
                     increase.toggle()
                 }
                 
                 self?.qqView.level = CGFloat(level)
-//                self?.qqView.progress = CGFloat(level) / 100.0
                 print(level)
             }
         }

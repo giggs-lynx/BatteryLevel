@@ -18,9 +18,7 @@
 		3DB9FCCF272009F1003E5520 /* BatteryLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCCC272009F1003E5520 /* BatteryLevelView.swift */; };
 		3DB9FCD0272009F1003E5520 /* Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCCD272009F1003E5520 /* Exts.swift */; };
 		3DB9FCD1272009F1003E5520 /* BatteryLevelLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCCE272009F1003E5520 /* BatteryLevelLayer.swift */; };
-		3DB9FCD32721644F003E5520 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCD22721644F003E5520 /* ProgressView.swift */; };
 		3DB9FCD52722C7E0003E5520 /* FieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCD42722C7E0003E5520 /* FieldView.swift */; };
-		3DB9FCD72726992E003E5520 /* GradientHorizontalProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9FCD62726992E003E5520 /* GradientHorizontalProgressBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,9 +56,7 @@
 		3DB9FCCC272009F1003E5520 /* BatteryLevelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryLevelView.swift; sourceTree = "<group>"; };
 		3DB9FCCD272009F1003E5520 /* Exts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Exts.swift; sourceTree = "<group>"; };
 		3DB9FCCE272009F1003E5520 /* BatteryLevelLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryLevelLayer.swift; sourceTree = "<group>"; };
-		3DB9FCD22721644F003E5520 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		3DB9FCD42722C7E0003E5520 /* FieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldView.swift; sourceTree = "<group>"; };
-		3DB9FCD62726992E003E5520 /* GradientHorizontalProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientHorizontalProgressBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,9 +117,7 @@
 				3DB9FCCE272009F1003E5520 /* BatteryLevelLayer.swift */,
 				3DB9FCCC272009F1003E5520 /* BatteryLevelView.swift */,
 				3DB9FCCD272009F1003E5520 /* Exts.swift */,
-				3DB9FCD22721644F003E5520 /* ProgressView.swift */,
 				3DB9FCD42722C7E0003E5520 /* FieldView.swift */,
-				3DB9FCD62726992E003E5520 /* GradientHorizontalProgressBar.swift */,
 			);
 			path = BatteryLevel;
 			sourceTree = "<group>";
@@ -281,8 +275,6 @@
 				3DB9FCD0272009F1003E5520 /* Exts.swift in Sources */,
 				3DB9FCA1272009D2003E5520 /* ViewController.swift in Sources */,
 				3DB9FC9D272009D2003E5520 /* AppDelegate.swift in Sources */,
-				3DB9FCD32721644F003E5520 /* ProgressView.swift in Sources */,
-				3DB9FCD72726992E003E5520 /* GradientHorizontalProgressBar.swift in Sources */,
 				3DB9FC9F272009D2003E5520 /* SceneDelegate.swift in Sources */,
 				3DB9FCCF272009F1003E5520 /* BatteryLevelView.swift in Sources */,
 			);

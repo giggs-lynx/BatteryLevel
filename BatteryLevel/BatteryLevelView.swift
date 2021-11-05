@@ -8,17 +8,29 @@
 import Foundation
 import UIKit
 
+@IBDesignable
 class BatteryLevelView: UIView {
     
-    var level: CGFloat {
+    var insets: UIEdgeInsets {
         get {
-            batteryLayer.level
+            batteryLayer.insets
         }
         set {
-            batteryLayer.level = newValue
+            batteryLayer.insets = newValue
         }
     }
     
+    @IBInspectable
+    var padding: CGFloat {
+        get {
+            batteryLayer.padding
+        }
+        set {
+            batteryLayer.padding = newValue
+        }
+    }
+    
+    @IBInspectable
     var lineWidth: CGFloat {
         get {
             batteryLayer.lineWidth
@@ -28,6 +40,7 @@ class BatteryLevelView: UIView {
         }
     }
     
+    @IBInspectable
     var lineColor: UIColor {
         get {
             batteryLayer.lineColor
@@ -37,16 +50,8 @@ class BatteryLevelView: UIView {
         }
     }
     
-    var batteryInsets: UIEdgeInsets {
-        get {
-            batteryLayer.insets
-        }
-        set {
-            batteryLayer.insets = newValue
-        }
-    }
-    
-    var batteryCornerRadius: CGFloat {
+    @IBInspectable
+    var cornerRadius: CGFloat {
         get {
             batteryLayer.batteryCornerRadius
         }
@@ -55,7 +60,27 @@ class BatteryLevelView: UIView {
         }
     }
     
-    var batteryLayer: BatteryLevelLayer {
+    @IBInspectable
+    var symbolColor: UIColor {
+        get {
+            batteryLayer.symbolColor
+        }
+        set {
+            batteryLayer.symbolColor = newValue
+        }
+    }
+    
+    @IBInspectable
+    var level: CGFloat {
+        get {
+            batteryLayer.level
+        }
+        set {
+            batteryLayer.level = newValue
+        }
+    }
+    
+    private var batteryLayer: BatteryLevelLayer {
         return layer as! BatteryLevelLayer
     }
     
@@ -74,8 +99,15 @@ class BatteryLevelView: UIView {
     }
     
     func setup() {
+        backgroundColor = .clear
         contentScaleFactor = UIScreen.main.scale
         contentMode = UIView.ContentMode.redraw
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        
+        layer.setNeedsDisplay()
     }
     
 }
