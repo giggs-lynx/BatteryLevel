@@ -248,7 +248,9 @@ class BatteryLevelLayer: CALayer {
                 return .clear
             }
             
-            return _stop.startColor.interpolateRGBColorTo(_stop.endColor, fraction: CGFloat(_stop.range.count))
+            let fraction = (_value - CGFloat(_stop.range.startIndex)) / CGFloat(_stop.range.count)
+            
+            return _stop.startColor.interpolateRGBColorTo(_stop.endColor, fraction: fraction)
         }
         
         private static let minValue: CGFloat = 0.0
