@@ -27,6 +27,7 @@ class ViewController: UIViewController {
         attachQQView()
         attachQQButton()
         qqView.level = 70.0
+        qqView.isCharging = true
 //        mock()
         
     }

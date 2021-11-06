@@ -312,6 +312,10 @@ class BatteryLevelLayer: CALayer {
             pulseLayer.frame = CGRect(x: -bounds.width, y: 0.0, width: bounds.width, height: bounds.height)
             
             mask = maskLayer
+            
+            if let _ = pulseLayer.animation(forKey: "shim") {
+                startShimmer()
+            }
         }
         
         override func draw(in ctx: CGContext) {
@@ -375,7 +379,7 @@ class BatteryLevelLayer: CALayer {
             group.duration = 3.0
             group.repeatCount = .infinity
             
-            pulseLayer.add(group, forKey: nil)
+            pulseLayer.add(group, forKey: "shim")
         }
         
     }
