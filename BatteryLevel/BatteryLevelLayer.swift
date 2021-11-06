@@ -235,9 +235,9 @@ class BatteryLevelLayer: CALayer {
         }
         
         private let stops: [ColorStop] = [
-            ColorStop(range: 0..<20, startColor: .systemRed, endColor: .systemRed),
-            ColorStop(range: 20..<60, startColor: .systemOrange, endColor: .systemOrange),
-            ColorStop(range: 60..<80, startColor: .systemYellow, endColor: .systemYellow),
+            ColorStop(range: 0..<20, startColor: .systemRed, endColor: .systemOrange),
+            ColorStop(range: 20..<60, startColor: .systemOrange, endColor: .systemYellow),
+            ColorStop(range: 60..<80, startColor: .systemYellow, endColor: .systemGreen),
             ColorStop(range: 80..<101, startColor: .systemGreen, endColor: .systemGreen)
         ]
         
@@ -349,13 +349,13 @@ class BatteryLevelLayer: CALayer {
             
             layer.colors = [
                 UIColor.clear.cgColor,
-                UIColor.white.withAlphaComponent(0.2).cgColor,
                 UIColor.white.withAlphaComponent(0.3).cgColor,
-                UIColor.white.withAlphaComponent(0.2).cgColor,
+                UIColor.white.withAlphaComponent(0.7).cgColor,
+                UIColor.white.withAlphaComponent(0.3).cgColor,
                 UIColor.clear.cgColor,
             ]
             
-            layer.locations = [0.0, 0.45, 0.5, 0.55, 1.0]
+            layer.locations = [0.0, 0.35, 0.5, 0.65, 1.0]
             layer.startPoint = CGPoint(x: 0.0, y: 0.0)
             layer.endPoint = CGPoint(x: 1.0, y: 0.05)
             
