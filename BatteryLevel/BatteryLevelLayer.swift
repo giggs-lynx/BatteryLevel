@@ -63,6 +63,9 @@ class BatteryLevelLayer: CALayer {
     
     var isCharging: Bool = false {
         didSet {
+            guard isCharging != oldValue else {
+                return
+            }
             isCharging ? startChargingAnimation() : stopChargingAnimation()
         }
     }
