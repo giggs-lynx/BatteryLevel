@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private let qLevel: CGFloat = 5
+    private let qLevel: CGFloat = 1
     private lazy var qqView = BatteryLevelView()
     private lazy var qqButton: UIButton = {
         let o = UIButton()
@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         
         attachQQView()
         attachQQButton()
-        qqView.level = 70.0
+        qqView.level = 90.0
         qqView.isCharging = true
 //        mock()
         
@@ -105,9 +105,9 @@ class ViewController: UIViewController {
         var level: Int = 0
         var increase: Bool = true
         
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
-                level += increase ? 5 : -5
+                level += increase ? 1 : -1
                 if level == 0 || level == 100 {
                     increase.toggle()
                 }
