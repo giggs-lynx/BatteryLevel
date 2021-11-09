@@ -319,8 +319,11 @@ class BatteryLevelLayer: CALayer {
             
             mask = maskLayer
             
-            if let _ = pulseLayer.animation(forKey: "shim") {
-                startShimmer()
+            if
+                let shim = pulseLayer.animation(forKey: "shim") as? CAAnimationGroup,
+                let transX = shim.animations?.first as? CABasicAnimation,
+                (transX.byValue as? CGFloat) != bounds.width * 2.0 {
+                transX.byValue = bounds.width * 2.0
             }
         }
         
@@ -384,6 +387,7 @@ class BatteryLevelLayer: CALayer {
             group.animations = [animation]
             group.duration = 3.0
             group.repeatCount = .infinity
+            group.isRemovedOnCompletion = false
             
             pulseLayer.add(group, forKey: "shim")
         }
