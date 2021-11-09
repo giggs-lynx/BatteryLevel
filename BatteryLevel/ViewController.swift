@@ -20,6 +20,7 @@ class ViewController: UIViewController {
         
         return o
     }()
+    private var mockTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +72,7 @@ class ViewController: UIViewController {
         }
         
         let stopAct = UIAlertAction.init(title: "stop animation", style: .default) { [weak self] _ in
-                self?.qqView.isCharging = false
+            self?.qqView.isCharging = false
         }
         
         let incAct = UIAlertAction.init(title: "level + \(qLevel)", style: .default) { [weak self] _ in
@@ -79,6 +80,7 @@ class ViewController: UIViewController {
                 return
             }
             
+            self.cancelMock()
             self.qqView.level += self.qLevel
         }
         
@@ -87,6 +89,7 @@ class ViewController: UIViewController {
                 return
             }
             
+            self.cancelMock()
             self.qqView.level -= self.qLevel
         }
         
@@ -98,7 +101,14 @@ class ViewController: UIViewController {
             self.mock()
         }
         
-        let cancelAct = UIAlertAction.init(title: "cancel", style: .cancel)
+        let cancelAct = UIAlertAction.init(title: "cancel", style: .cancel) {
+            [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                
+                self.cancelMock()
+        }
         
         ac.addAction(startAct)
         ac.addAction(stopAct)
@@ -114,7 +124,7 @@ class ViewController: UIViewController {
         var level: Int = 0
         var increase: Bool = true
         
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        mockTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
                 level += increase ? 1 : -1
                 if level == 0 || level == 100 {
@@ -125,6 +135,10 @@ class ViewController: UIViewController {
                 print(level)
             }
         }
+    }
+    
+    private func cancelMock() -> Void {
+        mockTimer?.invalidate()
     }
 
 }
