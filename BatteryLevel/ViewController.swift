@@ -90,12 +90,21 @@ class ViewController: UIViewController {
             self.qqView.level -= self.qLevel
         }
         
+        let mockAct = UIAlertAction.init(title: "mock", style: .default) { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            
+            self.mock()
+        }
+        
         let cancelAct = UIAlertAction.init(title: "cancel", style: .cancel)
         
         ac.addAction(startAct)
         ac.addAction(stopAct)
         ac.addAction(incAct)
         ac.addAction(decAct)
+        ac.addAction(mockAct)
         ac.addAction(cancelAct)
         
         present(ac, animated: true, completion: nil)
