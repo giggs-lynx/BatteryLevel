@@ -262,7 +262,7 @@ class BatteryLevelLayer: CALayer {
         
         private lazy var pulseLayer: CAGradientLayer = createPulseLayer()
         
-        private lazy var whiteLayer: CALayer = {
+        private lazy var shimLayer: CALayer = {
             let l = CALayer()
             l.backgroundColor = UIColor.white.cgColor
             l.mask = pulseLayer
@@ -312,8 +312,9 @@ class BatteryLevelLayer: CALayer {
         override func layoutSublayers() {
             super.layoutSublayers()
             
-            whiteLayer.frame = bounds
-            addSublayer(whiteLayer)
+            shimLayer.frame = bounds
+            shimLayer.cornerRadius = cornerRadius
+            addSublayer(shimLayer)
             
             pulseLayer.frame = CGRect(x: -bounds.width, y: 0.0, width: bounds.width, height: bounds.height)
             
@@ -340,6 +341,7 @@ class BatteryLevelLayer: CALayer {
             let size = CGSize(width: width, height: bounds.size.height)
             let frame = CGRect(origin: bounds.origin, size: size)
             maskLayer.frame = frame
+            shimLayer.backgroundColor = fillColor.shimColor.cgColor
             
             UIGraphicsPopContext()
         }
@@ -358,15 +360,14 @@ class BatteryLevelLayer: CALayer {
             
             layer.colors = [
                 UIColor.clear.cgColor,
-                UIColor.white.withAlphaComponent(0.2).cgColor,
-                UIColor.white.withAlphaComponent(0.4).cgColor,
-                UIColor.white.withAlphaComponent(0.2).cgColor,
-                UIColor.clear.cgColor,
+                UIColor.white.cgColor,
+                UIColor.white.cgColor,
+                UIColor.clear.cgColor
             ]
             
-            layer.locations = [0.0, 0.4, 0.5, 0.6, 1.0]
+            layer.locations = [0.0, 0.9, 0.95, 1.0]
             layer.startPoint = CGPoint(x: 0.0, y: 0.0)
-            layer.endPoint = CGPoint(x: 1.0, y: 0.05)
+            layer.endPoint = CGPoint(x: 1.0, y: 0.08)
             
             return layer
         }

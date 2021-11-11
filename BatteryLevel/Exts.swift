@@ -171,21 +171,21 @@ public extension UIColor {
         return r
     }
 
-    var lighterColor: UIColor {
-        return lighterColor(removeSaturation: 0.5, resultAlpha: -1)
+    var shimColor: UIColor {
+        return adjustColor(hue: 0.01, sat: -0.3)
     }
     
-    func lighterColor(removeSaturation val: CGFloat, resultAlpha alpha: CGFloat) -> UIColor {
+    func adjustColor(hue: CGFloat = .zero, sat: CGFloat = .zero, bri: CGFloat = .zero) -> UIColor {
         var h: CGFloat = 0, s: CGFloat = 0
         var b: CGFloat = 0, a: CGFloat = 0
         
         guard getHue(&h, saturation: &s, brightness: &b, alpha: &a)
-        else {return self}
+        else { return self }
         
-        return UIColor(hue: h,
-                       saturation: max(s - val, 0.0),
-                       brightness: b,
-                       alpha: alpha == -1 ? a : alpha)
+        return UIColor(hue: min(max(h + hue, 0.0), 1.0),
+                       saturation: min(max(s + sat, 0.0), 1.0),
+                       brightness: min(max(b + bri, 0.0), 1.0),
+                       alpha: a)
     }
     
 }
